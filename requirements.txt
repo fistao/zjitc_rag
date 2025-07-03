@@ -1,19 +1,19 @@
 # 核心AI/ML依赖
-transformers==4.40.1  # 原4.30.2不存在，升级到最新稳定版
-torch==2.0.1          # 验证存在
-sentence-transformers==2.2.2  # 验证存在
-faiss-cpu==1.7.4      # 验证存在（GPU用户改为faiss-gpu==1.7.4）
+transformers<=4.40.1    # 只要不高于此版本即可
+torch<=2.0.1
+sentence-transformers<=2.2.2
+faiss-cpu<=1.7.4
 
 # 知识图谱
-neo4j==5.12.0         # 验证存在
-py2neo==2021.2.4      # 原2021.2.3不存在，修正为最终维护版
-networkx==3.1         # 验证存在
+neo4j<=5.12.0
+py2neo<=2021.2.4
+networkx<=3.1
 
 # Web服务
-flask==2.3.2          # 验证存在
-flask-cors==4.0.0     # 验证存在
-streamlit==1.25.0     # 验证存在
-gunicorn==20.1.0      # 验证存在
+flask<=2.3.2
+flask-cors<=4.0.0
+streamlit<=1.25.0
+gunicorn<=20.1.0
 
 # 数据处理
 beautifulsoup4==4.12.2  # 验证存在
