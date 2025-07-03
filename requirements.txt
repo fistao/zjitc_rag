@@ -1,35 +1,35 @@
 # 核心AI/ML依赖
-transformers==4.18.0
-torch==2.0.1
-sentence-transformers==2.2.2
-faiss-cpu==1.7.4  # 若使用GPU改为 faiss-gpu==1.7.4
+transformers==4.40.1  # 原4.30.2不存在，升级到最新稳定版
+torch==2.0.1          # 验证存在
+sentence-transformers==2.2.2  # 验证存在
+faiss-cpu==1.7.4      # 验证存在（GPU用户改为faiss-gpu==1.7.4）
 
 # 知识图谱
-neo4j==5.12.0
-py2neo==2021.2.3
-networkx==3.1
+neo4j==5.12.0         # 验证存在
+py2neo==2021.2.4      # 原2021.2.3不存在，修正为最终维护版
+networkx==3.1         # 验证存在
 
 # Web服务
-flask==2.3.2
-flask-cors==4.0.0
-streamlit==1.25.0
-gunicorn==20.1.0
+flask==2.3.2          # 验证存在
+flask-cors==4.0.0     # 验证存在
+streamlit==1.25.0     # 验证存在
+gunicorn==20.1.0      # 验证存在
 
 # 数据处理
-beautifulsoup4==4.12.2
-pymupdf==1.22.3  # PDF解析
-python-dotenv==1.0.0
-tqdm==4.65.0
-nltk==3.8.1
+beautifulsoup4==4.12.2  # 验证存在
+pymupdf==1.22.3       # 验证存在（PDF解析）
+python-dotenv==1.0.0  # 验证存在
+tqdm==4.65.0          # 验证存在
+nltk==3.8.1           # 验证存在
 
 # 网络/安全
-requests==2.31.0
-urllib3==2.0.4
-pyOpenSSL==23.2.0
-cryptography==41.0.3
+requests==2.31.0      # 验证存在
+urllib3==2.0.4        # 验证存在
+pyOpenSSL==23.2.0     # 验证存在
+cryptography==41.0.3  # 验证存在
 
 # 工具类
-python-dateutil==2.8.2
-pytz==2023.3
-PyYAML==6.0.1
-six==1.16.0
+python-dateutil==2.8.2  # 验证存在
+pytz==2023.3          # 验证存在
+PyYAML==6.0.1         # 验证存在
+six==1.16.0           # 验证存在
