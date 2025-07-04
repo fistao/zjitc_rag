@@ -1,9 +1,9 @@
 from neo4j import GraphDatabase
 
 # Neo4j Aura免费版连接
-uri = "neo4j+s://xxxx.databases.neo4j.io"
+uri = "neo4j+s://df0b5442.databases.neo4j.io"
 user = "neo4j"
-password = "your_password"
+password = "JQmCHP8wN98l_m5GR-owlf3-FXELcIptwH2SWWhyIoI"
 
 driver = GraphDatabase.driver(uri, auth=(user, password))
 
