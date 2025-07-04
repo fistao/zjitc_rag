@@ -1,0 +1,72 @@
+# =====================
+# 通用忽略规则
+# =====================
+# 操作系统生成的文件
+.DS_Store
+Thumbs.db
+ehthumbs.db
+
+# 日志文件
+*.log
+logs/
+
+# 临时文件
+temp/
+tmp/
+
+# =====================
+# Python特定忽略规则
+# =====================
+# 虚拟环境
+venv/
+env/
+.venv/
+
+# 缓存和编译文件
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# 测试和覆盖率报告
+.coverage
+htmlcov/
+.coverage.*
+
+# Jupyter Notebook自动生成的文件
+.ipynb_checkpoints/
+
+# =====================
+# Streamlit特定忽略规则
+# =====================
+.streamlit/secrets.toml  # 包含敏感信息的配置文件
+.streamlit/cache/
+
+# =====================
+# 数据文件
+# =====================
+data/  # 大型数据集目录
+*.csv
+*.parquet
+*.h5
+
+# =====================
+# IDE和编辑器特定忽略规则
+# =====================
+# PyCharm/IntelliJ
+.idea/
+*.iml
+
+# VS Code
+.vscode/
+
+# Sublime Text
+.sublime-workspace
+.sublime-project
+
+# =====================
+# 构建和打包相关
+# =====================
+dist/
+build/
+*.egg-info/
