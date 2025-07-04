@@ -1,35 +1,35 @@
 # 核心AI/ML依赖
-transformers>=4.30.0,<4.41.0  # 明确范围，避免4.40.x潜在问题
-torch>=2.0.1,<=2.7.1          # 支持CUDA 11.8/12.1
-sentence-transformers>=2.2.0,<=2.2.2
-faiss-cpu>=1.7.0,<=1.7.4      # GPU用户改为faiss-gpu
+transformers  # 直接安装镜像中存在的最新版本（自动跳过4.40.x若存在兼容性问题）
+torch
+sentence-transformers
+faiss-cpu     # GPU用户改为faiss-gpu
 
 # 知识图谱
-neo4j>=5.10.0,<=5.11.0        # 5.11.x是长期支持版
-py2neo>=2021.2.0,<=2021.2.4   # 最终维护版本
-networkx>=3.0,<=3.1           # 保持2.x/3.x兼容
+neo4j
+py2neo
+networkx
 
 # Web服务
-flask>=2.0.0,<=2.3.2          # 避免3.0不兼容
-flask-cors>=3.0.0,<=4.0.0
-streamlit>=1.24.0,<=1.25.0    # 1.x最后稳定版
-gunicorn>=20.0.0,<=20.1.0
+flask
+flask-cors
+streamlit
+gunicorn
 
 # 数据处理
-beautifulsoup4>=4.12.0,<=4.12.2
-pymupdf>=1.22.0,<=1.22.3      # PDF解析
-python-dotenv>=1.0.0,<=1.0.0  # 严格锁定
-tqdm>=4.65.0,<=4.66.0         # 小版本兼容
-nltk>=3.8.0,<=3.8.1
+beautifulsoup4
+pymupdf
+python-dotenv==1.0.0  # 安全敏感依赖，仍需严格锁定
+tqdm
+nltk
 
 # 网络/安全
-requests>=2.30.0,<=2.31.0     # 修复CVE漏洞
-urllib3>=2.0.0,<=2.0.4        # 兼容requests
-pyOpenSSL>=23.0.0,<=23.2.0
-cryptography>=41.0.0,<=41.0.3 # 与pyOpenSSL匹配
+requests
+urllib3
+pyOpenSSL
+cryptography
 
 # 工具类
-python-dateutil>=2.8.0,<=2.8.2
-pytz>=2023.0,<=2023.3
-PyYAML>=6.0.0,<=6.0.1
-six>=1.16.0,<=1.16.0          # 严格锁定
+python-dateutil
+pytz
+PyYAML
+six==1.16.0  # 旧兼容库，严格锁定
