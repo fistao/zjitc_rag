@@ -1,9 +1,13 @@
 import faiss
+import torch
+import os
 import numpy as np
 from text2vec import SentenceModel
 from transformers import AutoTokenizer, pipeline
 
 # 1. 向量模型和索引
+# 在加载模型前设置环境变量
+os.environ["HF_HUB_OFFLINE"] = "1"  # 强制使用本地缓存
 model = SentenceModel('shibing624/text2vec-base-chinese')
 index = faiss.IndexFlatL2(768)  # 向量维度
 
