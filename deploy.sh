@@ -10,4 +10,4 @@
 python app.py > backend.log &
 
 # 4. 启动前端
-python -m streamlit run ui.py --server.port 5000
+python -m streamlit run ui.py --server.port 8501
