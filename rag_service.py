@@ -4,9 +4,17 @@ import os
 import numpy as np
 from text2vec import SentenceModel
 from transformers import AutoTokenizer, pipeline
+from neo4j import GraphDatabase
+
+# 配置Neo4j连接
+NEO4J_URI = "neo4j+s://df0b5442.databases.neo4j.io"
+NEO4J_USER = "neo4j"
+NEO4J_PASSWORD = "JQmCHP8wN98l_m5GR-owlf3-FXELcIptwH2SWWhyIoI"
 
 # 1. 向量模型和索引
 # 在加载模型前设置环境变量
+os.environ["TRANSFORMERS_OFFLINE"] = "1"  # 完全离线模式
+os.environ["HF_DATASETS_OFFLINE"] = "1"  # 数据集离线
 os.environ["HF_HUB_OFFLINE"] = "1"  # 强制使用本地缓存
 model = SentenceModel('shibing624/text2vec-base-chinese')
 index = faiss.IndexFlatL2(768)  # 向量维度
@@ -22,14 +30,28 @@ generator = pipeline(
 
 # 3. 检索函数
 def retrieve(question, top_k=3):
-    # 文本向量化
-    query_vec = model.encode([question])[0]
+    driver = GraphDatabase.driver(NEO4J_URI, auth=(NEO4J_USER, NEO4J_PASSWORD))
+    query_vec = model.encode([question])[0].tolist()  # 转换为Python列表
     
-    # FAISS搜索
-    _, indices = index.search(np.array([query_vec]).astype('float32'), top_k)
+    cypher_query = """
+    WITH $vec AS query_vec
+    MATCH (c:Chunk)
+    WITH c, gds.similarity.cosine(query_vec, c.embedding) AS similarity
+    ORDER BY similarity DESC
+    LIMIT $top_k
+    RETURN c.text AS text
+    """
     
-    # 返回相关文本块
-    return [chunks[i] for i in indices[0]]
+    with driver.session() as session:
+        result = session.run(
+            cypher_query,
+            vec=query_vec,
+            top_k=top_k
+        )
+        chunks = [record["text"] for record in result]
+    
+    driver.close()
+    return chunks
 
 # 4. 生成回答
 def generate_answer(question):
