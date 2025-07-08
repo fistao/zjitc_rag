@@ -51,6 +51,13 @@ def retrieve(question, top_k=3):
         chunks = [record["text"] for record in result]
     
     driver.close()
+
+    # 直接打印结果
+    print("\n检索结果:")
+    for i, chunk in enumerate(chunks, 1):
+        print(f"\n结果 #{i}:")
+        print(chunk)
+        
     return chunks
 
 # 4. 生成回答
@@ -85,4 +92,4 @@ chunk_vectors = model.encode(chunks)
 index.add(np.array(chunk_vectors).astype('float32'))
 
 # 测试
-print(generate_answer("什么是面向对象编程？"))
+print(generate_answer("温州在浙江哪个位置？"))

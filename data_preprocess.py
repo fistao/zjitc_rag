@@ -1,55 +1,70 @@
 import os
 import re
+import fitz  # PyMuPDF
 from bs4 import BeautifulSoup
-from tree_sitter import Parser, Language
 
-# 文本清洗
-def clean_text(text):
-    # 去HTML标签
-    text = BeautifulSoup(text, 'html.parser').get_text()
-    # 去特殊字符
-    text = re.sub(r'[^\w\s.,;:!?()\[\]{}\'"]', '', text)
-    return text
+# 目录配置
+RAW_DATA_DIR = "data/raw"         # 原始PDF目录
+CLEANED_DATA_DIR = "data/cleaned" # 处理后文本目录
 
-# 代码解析 (Java示例)
-def parse_java(code):
-    # 加载Java语法
-    JAVA_LANGUAGE = Language('build/my-languages.so', 'java')
-    parser = Parser()
-    parser.set_language(JAVA_LANGUAGE)
+def ensure_directories():
+    """确保必要的目录存在"""
+    os.makedirs(RAW_DATA_DIR, exist_ok=True)
+    os.makedirs(CLEANED_DATA_DIR, exist_ok=True)
+    print(f"确保目录存在: {RAW_DATA_DIR}, {CLEANED_DATA_DIR}")
+
+def process_pdfs():
+    """处理data/raw目录中的所有PDF文件"""
+    ensure_directories()
     
-    tree = parser.parse(bytes(code, "utf8"))
-    root_node = tree.root_node
+    # 获取所有PDF文件
+    pdf_files = [f for f in os.listdir(RAW_DATA_DIR) if f.lower().endswith('.pdf')]
     
-    # 提取类和方法
-    entities = []
-    for node in root_node.children:
-        if node.type == 'class_declaration':
-            class_name = node.child_by_field_name('name').text.decode()
-            entities.append(f"Class: {class_name}")
+    if not pdf_files:
+        print(f"未找到PDF文件，请将PDF文件放在 {RAW_DATA_DIR} 目录中")
+        return
+    
+    print(f"找到 {len(pdf_files)} 个PDF文件待处理")
+    
+    processed_count = 0
+    for pdf_file in pdf_files:
+        try:
+            print(f"\n处理文件: {pdf_file}")
+            input_path = os.path.join(RAW_DATA_DIR, pdf_file)
+            text = ""
             
-            # 提取方法
-            for child in node.children:
-                if child.type == 'method_declaration':
-                    method_name = child.child_by_field_name('name').text.decode()
-                    entities.append(f"Method: {class_name}.{method_name}")
-    return entities
+            # 提取PDF文本
+            with fitz.open(input_path) as doc:
+                for page in doc:
+                    text += page.get_text()
+            
+            # 文本清洗
+            text = BeautifulSoup(text, 'html.parser').get_text()
+            text = re.sub(r'[^\w\s.,;:!?()\[\]{}\'"]', '', text)
+            text = re.sub(r'\s+', ' ', text).strip()
+            
+            # 保存清洗后的文本
+            output_file = f"{pdf_file.replace('.pdf', '.txt')}"
+            output_path = os.path.join(CLEANED_DATA_DIR, output_file)
+            
+            with open(output_path, 'w', encoding='utf-8') as f:
+                f.write(text)
+            
+            print(f"已保存清洗文本: {output_path}")
+            processed_count += 1
+        
+        except Exception as e:
+            print(f"处理 {pdf_file} 时出错: {str(e)}")
+    
+    print(f"\n处理完成! 共处理 {processed_count}/{len(pdf_files)} 个文件")
+    return processed_count > 0
 
-# 主处理流程
-def process_data():
-    # 遍历数据目录
-    for file in os.listdir('raw_data'):
-        if file.endswith('.txt'):
-            with open(f"raw_data/{file}", 'r') as f:
-                text = clean_text(f.read())
-                # 保存清洗后文本
-                with open(f"cleaned/{file}", 'w') as out:
-                    out.write(text)
-                    
-        elif file.endswith('.java'):
-            with open(f"raw_data/{file}", 'r') as f:
-                code = f.read()
-                entities = parse_java(code)
-                # 保存代码实体
-                with open(f"entities/{file}.ent", 'w') as out:
-                    out.write("\n".join(entities))
+if __name__ == "__main__":
+    # 处理PDF文件
+    print("="*50)
+    print("PDF文件处理开始")
+    print("="*50)
+    process_pdfs()
+    print("\n" + "="*50)
+    print("PDF处理完成!")
+    print("="*50)
